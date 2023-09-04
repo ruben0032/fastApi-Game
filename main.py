@@ -3,6 +3,7 @@ from network.errors import ErrorHandler
 from network.customResponse import CustomResponse
 from api.game.router import gameRouter
 from api.publisher.router import publisherRouter
+from fastapi.exceptions import RequestValidationError
 
 from store.connexion import Connexion
 
@@ -17,6 +18,10 @@ app.version = config.API_VERSION
 app.add_middleware(ErrorHandler)
 app.include_router(gameRouter, prefix='/api/game', tags=['games'])
 app.include_router(publisherRouter, prefix='/api/publisher', tags=['publishers'])
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    return CustomResponse().error(422, 'ERROR DE CAMPOS')
 
 
 @app.get("/")

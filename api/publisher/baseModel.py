@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 class Publisher(BaseModel):
     id: str | None = None
